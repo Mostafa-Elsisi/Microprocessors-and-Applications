@@ -1,0 +1,103 @@
+CODE SEGMENT
+ASSUME CS:CODE , DS:CODE ,SS:CODE ,ES:CODE
+PA     EQU 00H ;0000 0000
+PB     EQU 04H ;0000 0100
+PC     EQU 0AH ;0000 1010
+CO     EQU 0EH ;0000 1110      
+
+ORG 0000H
+
+MOV AL ,10000001B
+OUT CO ,AL
+
+START:
+     MOV AL , 11111011B
+SCAN:
+     OUT PC , AL
+     PUSH AX
+     IN AL , PC 
+     AND AL , 0FH
+     CMP AL , 0FH
+     JNZ FOUND
+     POP AX 
+     ROR AL ,1
+     TEST AL , 01111111B
+     JNZ SCAN 
+     JMP START
+       
+FOUND: 
+     CALL BOUNCEDELAY
+     IN AL ,PC 
+     LEA SI ,TABLE
+     LEA BX , KEYTABLE
+
+     
+NEXT:  
+     CMP AL ,[BX]
+     JZ DISP
+     INC SI 
+     INC BX
+     CMP SI , 79H
+     JZ DISPE
+     JMP NEXT
+ 
+DISP:
+     MOV AL , [SI]
+     OUT PA , AL
+     JMP RELEASED
+
+     DISPE:
+     MOV AL , 79H
+     OUT PA , AL
+     
+
+RELEASED:
+        IN AL ,PC
+	AND AL ,0FH
+	CMP AL ,0FH
+	JNE RELEASED
+	
+	
+	
+	CALL BOUNCEDELAY
+	JMP START
+
+
+ 
+
+BOUNCEDELAY:
+MOV CX , 1176D
+L2: LOOP L2
+    RET 
+      
+TABLE:
+    DB 3FH
+    DB 06H
+    DB 5BH
+    DB 4FH
+    DB 66H
+    DB 6DH
+    DB 7DH
+    DB 07H
+    DB 7FH
+    DB 6FH ;9
+    DB 79H
+
+KEYTABLE: 
+	 DB 10110111B ;0
+	 DB 11011110B ;1 
+	 DB 10111110B ;2
+	 DB 01111110B ;3
+	 DB 11011101B ;4 
+	 DB 10111101B ;5
+	 DB 01111101B ;6
+	 DB 11011011B ;7
+	 DB 10111011B ;8
+	 DB 01111011B ;9
+
+	 
+	
+  
+
+CODE ENDS
+END

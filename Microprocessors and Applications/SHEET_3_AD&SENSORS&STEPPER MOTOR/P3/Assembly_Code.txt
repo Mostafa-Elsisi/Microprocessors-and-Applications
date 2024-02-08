@@ -1,0 +1,73 @@
+CODE SEGMENT
+ASSUME CS:CODE , DS:CODE ,SS:CODE ,ES:CODE
+
+PA     EQU 00H
+PB     EQU 04H
+PC     EQU 0AH
+CO     EQU 0EH
+
+ORG 0000H
+
+MOV AL , 10000000B ;CONTROL WPRD: MAKE PORTA INPUT AND PORT B,C OUTPUT
+OUT CO , AL
+
+MOV DX ,120D
+START:
+     LEA SI , TABLE
+NEXT1:
+     MOV AL , [SI]
+     CMP AL , 00H
+     JZ START
+     OUT PA , AL
+     CALL DELAY
+     INC SI
+     DEC DX
+     JNZ NEXT1
+;-------------------------------------------------------
+MOV DX , 180D
+START2:
+      LEA SI , TABLEOPPSITE
+NEXT2:
+      MOV AL , [SI]
+      CMP AL , 00H
+      JZ  START2
+      OUT PA , AL
+      CALL DELAY
+      INC SI
+      DEC DX 
+      JNZ NEXT2
+            
+     
+FINISH: INT 3
+
+DELAY:
+MOV CX ,4000D
+L1:   LOOP L1
+RET
+
+TABLE:
+      DB 00000001B
+      DB 00000011B
+      DB 00000010B
+      DB 00000110B
+      DB 00000100B
+      DB 00001100B
+      DB 00001000B
+      DB 00001001B
+      DB 00000000B
+      
+      
+TABLEOPPSITE:
+            DB 00001001B
+	    DB 00001000B
+	    DB 00001100B
+	    DB 00000100B
+	    DB 00000110B
+	    DB 00000010B
+	    DB 00000011B
+	    DB 00000001B
+	    DB 00000000B
+                  
+
+CODE ENDS
+END

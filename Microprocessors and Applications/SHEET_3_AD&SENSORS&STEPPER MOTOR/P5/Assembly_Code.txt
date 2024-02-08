@@ -1,0 +1,73 @@
+CODE SEGMENT
+ASSUME  CS:CODE , DS:CODE , SS:CODE , ES:CODE
+PA1     EQU    08H
+PB1     EQU    0AH
+PC1     EQU    0CH
+CO1     EQU    0EH
+;-----------------------------
+PA2     EQU    09H
+PB2     EQU    0BH
+PC2     EQU    0DH
+CO2     EQU    0FH
+
+ORG 0000H
+MOV AL , 80H
+OUT CO2 , AL
+OUT CO1 , AL
+;---------------------------
+MOV DX , 60D
+START1:
+       LEA SI , TABLE
+NEXT1:
+     MOV AL, [SI]
+     CMP AL ,00H
+     JZ START1
+     OUT PA1,AL
+     CALL DELAY
+     INC SI
+     DEC DX
+     JNZ NEXT1
+;-------------------------------------
+MOV DX ,60D
+START2:
+       LEA SI , TABLEOPPSITE
+NEXT2:
+     MOV AL , [SI]
+     CMP AL ,00H
+     JZ START2
+     OUT PA2 , AL
+     CALL DELAY
+     INC SI 
+     DEC DX
+     JNZ NEXT2
+     
+     
+     
+FINISH: INT 3     
+
+;-------------------------------------------------
+TABLE:    
+      DB 00000011B     
+      DB 00000110B      
+      DB 00001100B
+      DB 00001001B
+      DB 00000000B
+      
+      
+TABLEOPPSITE: 	    
+	    DB 00001100B	    
+	    DB 00000110B	    
+	    DB 00000011B	    
+	    DB 00001001B
+	    DB 00000000B
+
+
+
+DELAY:
+MOV CX,4000D
+L1:
+LOOP L1
+RET
+
+CODE ENDS
+END

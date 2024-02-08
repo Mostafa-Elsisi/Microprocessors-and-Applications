@@ -1,0 +1,105 @@
+
+CODE SEGMENT
+ASSUME CS:CODE , DS:CODE ,SS:CODE ,ES:CODE
+
+
+PA     EQU 00H
+PB     EQU 04H
+PC     EQU 08H
+PCON   EQU 0CH
+
+ORG 0000H
+MOV AL , 10000000B
+OUT PCON, AL
+
+START:
+
+;---------PORTB => ROR-----------------------
+MOV AL,11111111B
+OUT PA,AL
+MOV DL,8D
+MOV AL , 01111111B
+
+LOOP1:
+OUT PB , AL
+CALL DELAY1
+ROR AL,1
+DEC DL
+JNZ LOOP1
+
+;---------PORTA,B => STOP --------------------
+MOV AL,11111111B
+OUT PA,AL
+OUT PB,AL
+CALL DELAY1
+
+;---------PORTA => ROR-----------------------
+MOV AL,11111111B
+OUT PB,AL
+MOV DL,8D
+MOV AL , 01111111B
+
+LOOP2:
+OUT PA , AL
+CALL DELAY1
+ROR AL,1
+DEC DL
+JNZ LOOP2
+
+;---------PORTB,A => STOP --------------------
+MOV AL,11111111B
+OUT PB,AL
+OUT PA,AL
+CALL DELAY1
+;=======================================================================
+;---------PORTA => ROL-----------------------
+MOV DL,8D
+MOV AL , 11111110B
+
+LOOP3:
+OUT PA , AL
+CALL DELAY1
+ROL AL,1
+DEC DL
+JNZ LOOP3
+;---------PORTB,A => STOP --------------------
+MOV AL,11111111B
+OUT PB,AL
+OUT PA,AL
+CALL DELAY1
+;---------PORTB => ROL-----------------------
+MOV DL,8D
+MOV AL , 11111110B
+
+LOOP4:
+OUT PB , AL
+CALL DELAY1
+ROL AL,1
+DEC DL
+JNZ LOOP4
+;---------PORTA => STOP --------------------
+MOV AL,11111111B
+OUT PA,AL
+OUT PB,AL
+CALL DELAY1
+
+;----------------------------
+JMP START
+
+
+
+
+DELAY1:
+MOV CX,58824D
+L1: LOOP L1
+RET
+
+
+CODE ENDS
+END
+
+
+
+
+
+

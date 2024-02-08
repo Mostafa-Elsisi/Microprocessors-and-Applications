@@ -1,0 +1,42 @@
+CODE SEGMENT
+ASSUME CS:CODE , DS:CODE ,SS:CODE ,ES:CODE
+PA     EQU 00H ;0000 0000
+PB     EQU 04H ;0000 0100
+PC     EQU 0AH ;0000 1010
+CO     EQU 0EH ;0000 1110      
+
+ORG 0000H
+
+MOV AL ,10000000B
+OUT CO ,AL
+
+START:     
+      MOV AL , 0FFH
+      OUT PA ,AL
+      MOV AL , 0F0H
+      OUT PC ,AL
+      CALL DELAY
+      MOV AL ,00H
+      OUT PA ,AL
+      CALL DELAY 
+      
+      MOV AL ,0FFH
+      OUT PA, AL
+      MOV AL ,0FH
+      OUT PC ,AL
+      CALL DELAY 
+      MOV AL ,00H
+      OUT PA , AL
+      CALL DELAY
+      JMP START
+
+
+DELAY:
+MOV CX ,58824D
+L2: LOOP L2
+RET
+
+
+ 
+CODE ENDS
+END

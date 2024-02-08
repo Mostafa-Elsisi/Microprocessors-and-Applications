@@ -1,0 +1,66 @@
+CODE SEGMENT
+ASSUME CS:CODE , DS:CODE ,SS:CODE ,ES:CODE
+
+PA     EQU 01H
+PB     EQU 05H
+PC     EQU 09H
+CO     EQU 0DH
+
+ORG 0000H
+
+MOV AL,10000000B
+OUT CO,AL
+
+START:
+
+LEA SI,TABLE
+
+SHOW:
+MOV DL , 2D
+
+SHOW_TWICE:
+        MOV AL, [SI]
+        OUT PB,AL
+        CALL DELAY
+        MOV BL,AL
+        MOV AL,00H
+        OUT PB,AL
+        CALL DELAY
+        DEC DL
+        JNZ SHOW_TWICE
+
+        CMP BL,6FH
+        JZ START
+        INC SI
+        JMP SHOW
+
+
+TABLE:
+        DB 3FH
+        DB 06H
+        DB 5BH
+        DB 4FH
+        DB 66H
+        DB 6DH
+        DB 7DH
+        DB 07H
+        DB 7FH
+        DB 6FH ;9
+
+
+
+
+DELAY:
+MOV CX,58824D
+L1: LOOP L1
+RET
+
+CODE ENDS
+END
+
+
+
+
+
+
+

@@ -1,0 +1,127 @@
+CODE SEGMENT
+ASSUME CS:CODE , DS:CODE ,SS:CODE ,ES:CODE
+PA     EQU 00H ;0000 0000
+PB     EQU 04H ;0000 0100
+PC     EQU 0AH ;0000 1010
+CO     EQU 0EH ;0000 1110      
+
+ORG 0000H
+
+MOV AL ,10000000B
+OUT CO ,AL
+  
+START:  
+      MOV DX ,8D
+START1:
+      MOV AL , 80H
+      LEA SI ,FONTB
+      
+SHOWB:
+      OUT PA ,AL
+      PUSH AX
+      MOV AL ,[SI]
+      OUT PC , AL
+      CALL DELAY      
+      INC SI
+      POP AX
+      ROR AL, 1 
+      CMP AL ,80H
+      JNZ SHOWB
+      DEC DX
+      JNZ START1
+      CALL DELAY1 
+;---------------------------------      
+      MOV DX ,8D
+START2:
+      MOV AL , 40H
+      LEA SI ,FONTH
+      
+SHOWH:
+      OUT PA ,AL
+      PUSH AX
+      MOV AL ,[SI]
+      OUT PC , AL
+      CALL DELAY      
+      INC SI
+      POP AX
+      ROR AL, 1 
+      CMP AL ,80H
+      JNZ SHOWH
+      
+      DEC DX
+      JNZ START2
+      
+      CALL DELAY1
+ ;------------------------------------------     
+        MOV DX ,8D
+START3:
+      MOV AL , 80H
+      LEA SI ,FONTN
+      
+SHOWN:
+      OUT PA ,AL
+      PUSH AX
+      MOV AL ,[SI]
+      OUT PC , AL
+      CALL DELAY      
+      INC SI
+      POP AX
+      ROR AL, 1 
+      CMP AL ,80H
+      JNZ SHOWN
+      
+      DEC DX
+      JNZ START3
+      CALL DELAY1
+;------------------------------------
+  
+      JMP START
+
+
+
+DELAY:
+MOV CX ,1000D
+L1: LOOP L1
+RET  
+
+DELAY1:
+MOV CX , 58824D
+L2: LOOP L2
+RET
+
+
+
+FONTB:  
+      DB  0FFH 
+      DB  0FFH
+      DB  00H
+      DB  00H 
+      DB  66H
+      DB  00H 
+      DB  99H
+      DB  0FFH
+
+FONTH:
+      
+      DB 00H
+      DB 00H
+      DB 0E7H
+      DB 0E7H
+      DB 0E7H
+      DB 00H     
+      DB 00H     
+      
+FONTN:
+      DB 00H
+      DB 00H
+      DB 0F9H
+      DB 0F3H
+      DB 0CFH
+      DB 09FH
+      DB 00H
+      DB 00H
+
+
+ 
+CODE ENDS
+END

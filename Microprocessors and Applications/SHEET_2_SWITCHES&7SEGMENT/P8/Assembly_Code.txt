@@ -1,0 +1,37 @@
+
+CODE SEGMENT
+
+ASSUME CS:CODE , DS:CODE , ES:CODE , SS:CODE
+
+PA      EQU 01H
+PB      EQU 05H
+PC      EQU 09H
+CO      EQU 0DH
+
+ORG 0000H
+MOV AL,10010010B
+OUT CO,AL
+
+START:
+      IN AL , PA
+      AND AL , 00001111B
+      MOV DL , AL
+      
+      ROL DL , 1
+      ROL DL , 1
+      ROL DL , 1
+      ROL DL , 1
+      
+      IN AL , PB
+      
+      AND AL , 00001111B
+      MOV CL,AL
+      OR DL,CL
+      MOV AL,DL
+      OUT PC,AL
+      JMP START
+
+
+CODE ENDS
+END
+
